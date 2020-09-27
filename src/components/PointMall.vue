@@ -80,14 +80,19 @@ export default {
     },
     /* 检查是否兑换 */
     checkEx(id) {
-      this.id = id;
-      this.exchangeV = true;
+      let timer = null;
+      if (timer) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(() => {
+        this.id = id;
+        this.exchangeV = true;
+      }, 1000);
     },
     /* 确认兑换商品 */
     exchangeRecords(bool) {
       this.exchangeV = bool;
       this.exchange(this.id);
-      this.getNewPoint();
     },
     /* 兑换商品 */
     async exchange() {
@@ -99,6 +104,7 @@ export default {
           message: "兑换成功",
           type: "success"
         });
+        this.getNewPoint();
       }
     }
   },
@@ -142,6 +148,7 @@ export default {
       margin-top: 40px;
       width: 100%;
       height: 400px;
+      overflow: auto;
       &-title {
         padding-left: 50px;
         height: 40px;
@@ -149,8 +156,10 @@ export default {
       }
       &-container {
         display: inline-block;
-        margin-top: 20px;
-        margin-right: 20px;
+        margin-top: 40px;
+        margin-right: 50px;
+        margin-left: 30px;
+        margin-bottom: 10px;
         &-section {
           width: 250px;
           height: 360px;

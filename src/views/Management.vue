@@ -21,13 +21,21 @@
           >
             积分商城
           </div>
-          <div class="aside-section" @click="quit">退出</div>
+          <div class="aside-section" @click="isQuit = true">退出</div>
         </div>
       </div>
       <div class="manage-main">
         <router-view></router-view>
       </div>
     </div>
+
+    <el-dialog title="提示" :visible.sync="isQuit" width="30%">
+      <span>确认要退出吗</span>
+      <span slot="footer">
+        <el-button @click="quit">确定</el-button>
+        <el-button @click="isQuit = false">取消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -38,7 +46,8 @@ export default {
   data() {
     return {
       isClick: this.$route.name,
-      list: {}
+      list: {},
+      isQuit: false
     };
   },
   methods: {
@@ -64,6 +73,7 @@ export default {
     },
     /* 退出 */
     quit() {
+      this.isQuit = false;
       this.$router.replace({
         name: "login"
       });

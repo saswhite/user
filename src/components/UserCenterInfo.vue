@@ -37,13 +37,21 @@
         class="demo-ruleForm"
       >
         <el-form-item label="旧密码" prop="oldPass">
-          <el-input v-model="ruleForm.oldPass"></el-input>
+          <el-input v-model="ruleForm.oldPass" type="password"></el-input>
         </el-form-item>
         <el-form-item label="新密码" prop="pass">
-          <el-input v-model="ruleForm.pass" autocomplete="off"></el-input>
+          <el-input
+            v-model="ruleForm.pass"
+            autocomplete="off"
+            type="password"
+          ></el-input>
         </el-form-item>
         <el-form-item label="再次输入新密码" prop="checkPass">
-          <el-input v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+          <el-input
+            v-model="ruleForm.checkPass"
+            autocomplete="off"
+            type="password"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm(false)">保存</el-button>
