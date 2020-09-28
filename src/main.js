@@ -15,6 +15,16 @@ Vue.prototype.routerGet = get;
 Vue.prototype.routerPut = put;
 Vue.prototype.routerDel = del;
 
+Vue.prototype.getUserInfo = function() {
+  let userid = localStorage.getItem("userid");
+  let userInfo = get("/user/userinfo", {
+    params: {
+      id: userid
+    }
+  });
+  return userInfo;
+};
+
 Vue.config.productionTip = false;
 
 Vue.filter("timeFilter", value => {

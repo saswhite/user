@@ -1,5 +1,6 @@
 import axios from "axios";
 import Config from "./config";
+import { Message } from "element-ui";
 
 let api = axios.create({
   baseURL: Config.baseUrl,
@@ -17,7 +18,11 @@ api.interceptors.request.use(
     return config;
   },
   error => {
-    // 对请求错误做些什么
+    if (error.response.status == "500" || error.response.status == "400") {
+      Message.error({
+        message: "服务器出差了"
+      });
+    }
     return Promise.reject(error);
   }
 );
@@ -64,6 +69,6 @@ const errorHandler = error => {
   let errorMsg =
     (error.response && error.response.data && error.response.data.message) ||
     "服务器请求错误，请重试";
-  alert(errorMsg);
+  Message.error(errorMsg);
   return errorMsg;
 };

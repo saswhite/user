@@ -33,7 +33,6 @@ export default {
       });
 
       this.list = exchangeData;
-      console.log(exchangeData);
     }
   },
   created() {

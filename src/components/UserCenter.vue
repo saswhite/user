@@ -29,6 +29,7 @@
 <script>
 import UserCenterInfo from "../components/UserCenterInfo";
 import ExchangeRecords from "../components/ExchangeRecords";
+import { mapState } from "vuex";
 export default {
   name: "UserCenter",
   data() {
@@ -40,7 +41,10 @@ export default {
   computed: {
     getUserinfo() {
       return this.$route;
-    }
+    },
+    ...mapState({
+      userinfo: "list"
+    })
   },
   components: {
     UserCenterInfo,
@@ -51,15 +55,8 @@ export default {
       this.isChange = name;
     },
     /*获取用户信息 */
-    async getUserInfo() {
-      let userid = localStorage.getItem("userid");
-      let params = {
-        id: userid
-      };
-      let userinfo = await this.routerGet("/user/userinfo", {
-        params
-      });
-      this.list = userinfo;
+    getUserInfo() {
+      this.list = this.userinfo;
     }
   },
   created() {

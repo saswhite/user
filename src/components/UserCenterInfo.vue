@@ -1,24 +1,24 @@
 <template>
   <div class="info">
     <div class="info-avatar">
-      <img :src="userinfo.avatar" alt="" class="info-img" />
+      <img :src="userInfo.avatar" alt="" class="info-img" />
     </div>
     <div class="info-main">
       <div class="info-main-section">
         姓名：
-        <span>{{ userinfo.username }}</span>
+        <span>{{ userInfo.username }}</span>
       </div>
       <div class="info-main-section">
         学校：
-        <span>{{ userinfo.school }}</span>
+        <span>{{ userInfo.school }}</span>
       </div>
       <div class="info-main-section">
         昵称：
-        <span>{{ userinfo.nickname }}</span>
+        <span>{{ userInfo.nickname }}</span>
       </div>
       <div class="info-main-section">
         性别：
-        <span>{{ userinfo.gender | genderFilter }}</span>
+        <span>{{ userInfo.gender | genderFilter }}</span>
       </div>
       <div class="info-main-section">
         密码：
@@ -27,7 +27,12 @@
       </div>
     </div>
 
-    <el-dialog title="修改密码" :visible.sync="dialogVisible" width="50%">
+    <el-dialog
+      title="修改密码"
+      :visible.sync="dialogVisible"
+      width="50%"
+      @close="clear"
+    >
       <el-form
         :model="ruleForm"
         status-icon
@@ -89,10 +94,19 @@ export default {
         oldPass: [{ required: true, message: "输入框为空", trigger: "blur" }]
       },
       dialogVisible: false,
-      userinfo: []
+      userInfo: []
     };
   },
   methods: {
+    clear() {
+      this.ruleForm = {};
+      this.$refs.ruleForm.clearValidate();
+    },
+    getInfo() {
+      this.getUserInfo().then(res => {
+        this.userInfo = res;
+      });
+    },
     /* 显示更改密码窗口 */
     show() {
       this.dialogVisible = !this.dialogVisible;
@@ -104,7 +118,6 @@ export default {
           this.exchangePassword();
           this.dialogVisible = bool;
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -122,27 +135,17 @@ export default {
           type: "success"
         });
         this.ruleForm = {};
-        this.getUserInfo();
+        this.getInfo();
       }
-    },
-    /* 获取积分 */
-    async getUserInfo() {
-      let userid = localStorage.getItem("userid");
-      let userinfo = await this.routerGet("/user/userinfo", {
-        params: {
-          id: userid
-        }
-      });
-      this.userinfo = userinfo;
     }
   },
   computed: {
     passwordStar() {
-      return ("" + this.userinfo.password).replace(/./g, "*");
+      return ("" + this.userInfo.password).replace(/./g, "*");
     }
   },
   created() {
-    this.getUserInfo();
+    this.getInfo();
   }
 };
 </script>

@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
 export default {
   name: "Management",
   data() {
@@ -51,18 +50,10 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["getPoint"]),
-    /* 获取用户信息 */
-    async getUserInfo() {
-      let userid = localStorage.getItem("userid");
-      let params = {
-        id: userid
-      };
-      let userinfo = await this.routerGet("/user/userinfo", {
-        params
+    getInfo() {
+      this.getUserInfo().then(res => {
+        this.list = res;
       });
-      this.getPoint(userinfo.integration);
-      this.list = userinfo;
     },
     /* 跳转子路由 */
     change(name) {
@@ -74,14 +65,14 @@ export default {
     /* 退出 */
     quit() {
       this.isQuit = false;
+      localStorage.removeItem("userid");
       this.$router.replace({
         name: "login"
       });
-      localStorage.removeItem("userid");
     }
   },
   created() {
-    this.getUserInfo();
+    this.getInfo();
   }
 };
 </script>

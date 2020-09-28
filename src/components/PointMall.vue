@@ -4,7 +4,7 @@
     <div class="point-main">
       <div class="point-main-header">
         <div class="point-main-header-title">当前积分</div>
-        <div class="point-main-header-point">{{ point }}</div>
+        <div class="point-main-header-point">{{ userInfo.integration }}</div>
       </div>
       <div class="point-main-commodity">
         <div class="point-main-commodity-title">商品列表</div>
@@ -30,7 +30,7 @@
 
     <el-dialog title="提示" :visible.sync="exchangeV" width="30%">
       <span>确定兑换这个商品吗</span>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer">
         <el-button @click="exchangeV = false">取 消</el-button>
         <el-button type="primary" @click="exchangeRecords(false)"
           >确 定</el-button
@@ -41,53 +41,30 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import _ from "lodash";
 export default {
   name: "PointMall",
   data() {
     return {
       list: [],
       exchangeV: false,
-      id: ""
+      id: "",
+      point: "",
+      userInfo: {}
     };
   },
-  computed: {
-    ...mapState({
-      point: "point"
-    })
-  },
   methods: {
-    ...mapActions(["getPoint"]),
-    /* 获取积分 */
-    async getNewPoint() {
-      let userid = localStorage.getItem("userid");
-      let pointData = await this.routerGet("/user/userinfo", {
-        params: {
-          id: userid
-        }
-      });
-      this.getPoint(pointData.integration);
-    },
     /* 获取商品列表 */
     async getShopList() {
-      let userid = localStorage.getItem("userid");
-      let shopList = await this.routerGet("/shop/shopList", {
-        id: userid
-      });
+      let shopList = await this.routerGet("/shop/shopList");
       if (shopList) {
         this.list = shopList;
       }
     },
     /* 检查是否兑换 */
     checkEx(id) {
-      let timer = null;
-      if (timer) {
-        clearTimeout(timer);
-      }
-      timer = setTimeout(() => {
-        this.id = id;
-        this.exchangeV = true;
-      }, 1000);
+      this.id = id;
+      this.exchangeV = true;
     },
     /* 确认兑换商品 */
     exchangeRecords(bool) {
@@ -104,12 +81,19 @@ export default {
           message: "兑换成功",
           type: "success"
         });
-        this.getNewPoint();
+        this.getInfo();
       }
+    },
+    getInfo() {
+      this.getUserInfo().then(res => {
+        this.userInfo = res;
+      });
     }
   },
   created() {
     this.getShopList();
+    this.getInfo();
+    this.checkEx = _.debounce(this.checkEx, 1000);
   }
 };
 </script>

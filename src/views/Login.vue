@@ -67,20 +67,24 @@ export default {
     },
     /* 发送登陆请求 */
     async loginJump() {
-      let loginData = await this.routerPost("/user/login", {
-        username: this.login.username,
-        password: this.login.password
-      });
-      if (loginData.success) {
-        this.$message({
-          message: "登陆成功",
-          type: "success"
+      try {
+        let loginData = await this.routerPost("/user/login", {
+          username: this.login.username,
+          password: this.login.password
         });
-        this.loginForm = {};
-        localStorage.setItem("userid", loginData.user._id);
-        this.$router.push({
-          name: "management"
-        });
+        if (loginData.success) {
+          this.$message({
+            message: "登陆成功",
+            type: "success"
+          });
+          this.login = {};
+          localStorage.setItem("userid", loginData.user._id);
+          this.$router.push({
+            name: "management"
+          });
+        }
+      } catch (err) {
+        return err;
       }
     },
     /* 跳转到登陆页面 */
