@@ -40,21 +40,21 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Management",
   data() {
     return {
       isClick: this.$route.name,
-      list: {},
       isQuit: false
     };
   },
+  computed: {
+    ...mapState({
+      list: state => state.list
+    })
+  },
   methods: {
-    getInfo() {
-      this.getUserInfo().then(res => {
-        this.list = res;
-      });
-    },
     /* 跳转子路由 */
     change(name) {
       this.$router.push({
@@ -70,9 +70,6 @@ export default {
         name: "login"
       });
     }
-  },
-  created() {
-    this.getInfo();
   }
 };
 </script>

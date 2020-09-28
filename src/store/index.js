@@ -7,13 +7,14 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     point: "",
-    list: {}
+    list: JSON.parse(localStorage.getItem("userInfo")) || {}
   },
   mutations: {
     [type.GET_POINT](state, value) {
       state.point = value;
     },
     [type.GET_USER_INFO](state, value) {
+      console.log(value);
       state.list = value;
     }
   },
@@ -22,7 +23,7 @@ export default new Vuex.Store({
       commit(type.GET_POINT, value);
     },
     getUserInfo({ commit }, value) {
-      console.log(value);
+      localStorage.setItem("userInfo", JSON.stringify(value));
       commit(type.GET_USER_INFO, value);
     }
   },

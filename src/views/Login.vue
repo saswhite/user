@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "Login",
   data() {
@@ -54,6 +55,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["getUserInfo"]),
     /* 检查登陆数据 */
     checkLogin() {
       this.$refs.loginForm.validate(valid => {
@@ -79,6 +81,7 @@ export default {
           });
           this.login = {};
           localStorage.setItem("userid", loginData.user._id);
+          this.getUserInfo(loginData.user);
           this.$router.push({
             name: "management"
           });
